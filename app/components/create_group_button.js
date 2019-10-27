@@ -22,7 +22,7 @@ class CreateGroupButton extends Component{
 		.then((snap) => {
 			console.log('Group creation successful');
 			const key  = snap.key;
-			navigate("Home", {
+			navigate("Limit", {
 				name: username,
 				unique_key: key,
 				group_key: key.slice(key.length-6,key.length)
