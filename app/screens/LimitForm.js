@@ -10,6 +10,8 @@ export default class Form extends Component {
 	    this.setState({
 	        mobile: text.replace(/[^0-9]/g, ''),
 	    });
+
+	    // TODO : change submission adds this to firebase
 	}
 	render() {
 		return (
