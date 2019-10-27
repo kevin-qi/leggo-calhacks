@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import { Alert, Button, View, Text } from 'react-native';
+import firebase from '../firebase_init.js'
 
-export default class IncrementDrinksButton extends Component{
+export default class CreateGroupButton extends Component{
 	constructor(props) {
 		super(props);
-		this.addDrink = this.sayHello.bind(this)
+		//this.addDrink = this.addDrink.bind(this)
 	}
 
-	addDrink() {
-		
+	generateGroup() {
+		firebase.database().ref('/groups').set({
+			"Kevin": {
+				"Drinks": 0,
+				"Drinks Limit": 0
+			}
+		});
 	}
 
 	render () {
@@ -20,7 +26,7 @@ export default class IncrementDrinksButton extends Component{
 			}}> 
 				<Button 
 					title = "Add Drink"
-					onPress = {() => Alert.alert("Drink added")}
+					onPress = {this.generateGroup}
 				/>
 			</View>
 		);
