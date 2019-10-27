@@ -22,6 +22,9 @@ const Navigator = createStackNavigator({
 	Join : {
 		screen: JoinScreen
 	},
+	LimitScreen : {
+		screen: LimitScreen
+	}
 },
 {
 	initialRouteName: "RegisterName"
