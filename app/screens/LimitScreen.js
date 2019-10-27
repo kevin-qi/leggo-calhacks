@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, View, Text } from 'react-native';
 import { TextInput } from 'react-native';
 
-export default class LimitScreen extends Component {
+export default class  extends Component {
 	/*static navigationOptions = {
 		title: 'Home',
 	};*/
@@ -18,6 +18,8 @@ export default class LimitScreen extends Component {
 		    this.setState({
 		        limit: limit,
 		    });
+		    // TODO : navigate out back to counter
+		    // TODO : add user limit to db 
 		} else {
 			this.setState({ limitError: "Limit on drinks is not greater than 0"})
 		}
