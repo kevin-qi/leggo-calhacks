@@ -13,19 +13,27 @@ class CreateGroupButton extends Component{
 	generateGroup() {
 		const username = this.props.name;
 		const {navigate} = this.props.navigation;
-		firebase.database().ref('/groups').push({
+		var db_ref = firebase.database();
+		db_ref.ref('/groups').push({
 			[username]: {
 				"Drinks": 0,
 				"Drinks Limit": 0
 			}
 		})
 		.then((snap) => {
-			console.log('Group creation successful');
 			const key  = snap.key;
-			navigate("Limit", {
-				name: username,
-				unique_key: key,
-				group_key: key.slice(key.length-6,key.length)
+			const group_key = key.slice(key.length-6,key.length)
+			db_ref.ref("/groups/"+key).set({
+				"group_key": group_key
+			})
+			.then((snap) => {
+				console.log('Group creation successful');
+
+				navigate("Limit", {
+					name: username,
+					unique_key: key,
+					group_key: group_key
+				})
 			})
 		})
 		.catch((error) => {
