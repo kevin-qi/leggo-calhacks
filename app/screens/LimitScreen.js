@@ -25,18 +25,18 @@ export default class LimitScreen extends Component {
 		let limit = text.replace(/[^0-9]/g, '');
 		const { navigation } = this.props;
 
-		const unique_key = JSON.stringify(navigation.getParam("unique_key"));
-		const username = JSON.stringify(navigation.getParam("name"));
-		const group_key = JSON.stringify(navigation.getParam("group_key"));
+		const unique_key = navigation.getParam("unique_key");
+		const username = navigation.getParam("name");
+		const group_key = navigation.getParam("group_key");
 		
 		if (limit > 0) {
 		    this.setState({
 		        limit: limit,
 		        limitError: ""
 		    });
-
-		    firebase.database().ref('/groups/' + unique_key + "/" + username).set({
-		    		"Drinks Limit" : this.state.limit
+		    firebase.database().ref('/groups/' + unique_key + "/" + username).update({
+		    		"Drinks Limit" : parseInt(this.state.limit),
+		    		"Drinks" : 0
 			})
 			.then((snap) => {
 				console.log('Drink limit set');
@@ -50,6 +50,9 @@ export default class LimitScreen extends Component {
 	}
 	render() {
 		const { navigation } = this.props;
+		const unique_key = navigation.getParam("unique_key");
+		const username = navigation.getParam("name");
+		const group_key = navigation.getParam("group_key");
 
 		const drinks_limit = this.state.limit;
 		return (
@@ -74,7 +77,10 @@ export default class LimitScreen extends Component {
 				<Button
 					title="Ok"
 					onPress={() => navigation.navigate("Home", {
-					drinks_limit: drinks_limit
+					drinks_limit: drinks_limit,
+					unique_key: unique_key,
+		    		name: username,
+		    		group_key: group_key
 				})}
 				/>   	
 

@@ -32,7 +32,7 @@ export default class JoinScreen extends Component {
 		.equalTo(group_key)
 		.on("value", (snap) => {
 			console.log(group_key);
-			const key  = snap.val();
+			const key  = Object.keys(snap.val())[0];
 			console.log(snap);
 			console.log(key);
 			navigate("Limit", {
@@ -54,7 +54,7 @@ export default class JoinScreen extends Component {
 			}}>
 				<TextInput
 					style = {{height: 40}}
-					placeholder = "Enter your name"
+					placeholder = "Enter group key"
 					onChangeText = {(str) => this.setState({group_key: str})}
 					//value = this.state.text
 				/>

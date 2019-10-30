@@ -14,6 +14,8 @@ import {
   TextInput
 } from 'react-native';
 
+import firebase from '../firebase_init.js';
+
 var screen = Dimensions.get('window');
 
 export default class Button_Control extends Component{
@@ -29,6 +31,8 @@ export default class Button_Control extends Component{
 
     this.addDrink = this.addDrink.bind(this);
     this.undoDrink = this.undoDrink.bind(this);
+    this.syncState = this.syncState.bind(this);
+    this.resetDrink = this.resetDrink.bind(this);
   }
 
   onClose() {
@@ -49,8 +53,10 @@ export default class Button_Control extends Component{
     }
     else {
       this.setState({num_drinks: this.state.num_drinks + 1});
+      console.log("Updated state");
       this.refs.add_modal_success.open();
     }
+    return this.syncState(this.state.num_drinks + 1);
   }
 
   undoDrink() {
@@ -58,13 +64,33 @@ export default class Button_Control extends Component{
       this.setState({num_drinks: this.state.num_drinks - 1});
       this.refs.undo_modal.open();
     }
+    return this.syncState(this.state.num_drinks - 1);
+  }
+
+  resetDrink() {
+    this.setState({num_drinks: 0});
+    return this.syncState(0);
+  }
+
+  syncState(num_drinks) {
+    var db_ref = firebase.database();
+
+    db_ref.ref("/groups/"+this.unique_key+'/'+this.username).update({
+        "Drinks": num_drinks
+    })
+
+    console.log("Synced state");
   }
 
   render() {
     console.log("Hello")
     const {navigation} = this.props;
     const drinks_limit = navigation.getParam('drinks_limit')
+    this.unique_key = navigation.getParam('unique_key');
+    console.log(this.unique_key);
+    this.username = navigation.getParam('name');
     this.drinks_limit = drinks_limit
+
     var BContent = (
       <View style={[styles.btn, styles.btnModal]}>
         <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
@@ -113,9 +139,9 @@ export default class Button_Control extends Component{
             onClosed={this.onClose}>
 
             <Text style={styles.text}>Are you sure? {'\n'}This will reset your drink count!</Text>
-            <Button 
+            <Button   
               title={`YES!`} 
-              onPress={() => this.setState({num_drinks: 0})} 
+              onPress={this.resetDrink} 
               style={styles.btn}/>
 
             <Button 
