@@ -1,215 +1,65 @@
 import React, { Component } from 'react';
+import { Text } from 'react-native';
 
-import Modal from 'react-native-modalbox';
-import Limit_Drinks from '../components/limit_drinks'
-import Drink_Counter from '../components/drink_counter'
-
-import {
-  Text,
-  Button,
-  StyleSheet,
-  ScrollView,
-  View,
-  Dimensions,
-  TextInput
-} from 'react-native';
+import Dashboard from '../components/dashboard';
 
 import firebase from '../firebase_init.js';
 
-var screen = Dimensions.get('window');
-
-export default class Button_Control extends Component{
-
-  constructor() {
-    super();
+export default class HomeScreen extends Component{
+  constructor(props) {
+    super(props);
     this.state = {
-      isOpen: false,
-      isDisabled: false,
-      sliderValue: 0.3,
-      num_drinks: 0
-    };
-
-    this.addDrink = this.addDrink.bind(this);
-    this.undoDrink = this.undoDrink.bind(this);
-    this.syncState = this.syncState.bind(this);
-    this.resetDrink = this.resetDrink.bind(this);
-  }
-
-  onClose() {
-    console.log('Modal just closed');
-  }
-
-  onOpen() {
-    console.log('Modal just opened');
-  }
-
-  onClosingState(state) {
-    console.log('the open/close of the swipeToClose just changed');
-  }
-
-  addDrink() {
-    if(this.state.num_drinks >= this.drinks_limit){
-      this.refs.add_modal_failed.open();
+      group_data: null
     }
-    else {
-      this.setState({num_drinks: this.state.num_drinks + 1});
-      console.log("Updated state");
-      this.refs.add_modal_success.open();
-    }
-    return this.syncState(this.state.num_drinks + 1);
+    this.sync = this.sync.bind(this);
   }
 
-  undoDrink() {
-    if(this.state.num_drinks > 0){
-      this.setState({num_drinks: this.state.num_drinks - 1});
-      this.refs.undo_modal.open();
-    }
-    return this.syncState(this.state.num_drinks - 1);
+  componentDidMount() {
+    const {navigation} = this.props;
+    this.unique_key = navigation.getParam('unique_key');
+    this.group_key = navigation.getParam('group_key');
+
+
+    
+    firebase.database().ref('/groups/'+this.unique_key).on('value',
+      (snap, context) => {
+        this.sync(snap.val());
+      }
+    )
   }
 
-  resetDrink() {
-    this.setState({num_drinks: 0});
-    return this.syncState(0);
+  sync(data){
+    console.log("Syncing group data")
+    console.log(data);
+    delete data["group_key"];
+    this.setState({group_data: data});
   }
 
-  syncState(num_drinks) {
-    var db_ref = firebase.database();
-
-    db_ref.ref("/groups/"+this.unique_key+'/'+this.username).update({
-        "Drinks": num_drinks
-    })
-
-    console.log("Synced state");
-  }
+  /*
+*/
 
   render() {
-    console.log("Hello")
-    const {navigation} = this.props;
-    const drinks_limit = navigation.getParam('drinks_limit')
-    this.unique_key = navigation.getParam('unique_key');
-    console.log(this.unique_key);
-    this.username = navigation.getParam('name');
-    this.drinks_limit = drinks_limit
 
-    var BContent = (
-      <View style={[styles.btn, styles.btnModal]}>
-        <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
-      </View>
-    );
+    if(this.state.group_data != null){
+      console.log(Object.keys(this.state.group_data));
+      dashboards = Object.keys(this.state.group_data).map((key) => {
+        return(<Dashboard key = {key}
+          username = {key}
+          num_drinks = {this.state.group_data[key].Drinks}
+          drinks_limit = {this.state.group_data[key]["Drinks Limit"]}
+          unique_key = {this.unique_key}
+          group_key= {this.group_key}
+        />);
+      });
+      console.log(dashboards);
+    } else {
+      dashboards = <Text>Loading</Text>;
+    }
 
     return (
-      <View style={{ 
-         flex: 1,
-         alignItems:'center',
-         justifyContent:'center'
-      }}>
-        <Drink_Counter num_drinks = {this.state.num_drinks}/>
-
-        <Limit_Drinks limit={drinks_limit}/>
-        <View style={styles.wrapper}>
-          
-
-          <Button title="ADD" onPress={this.addDrink} style={styles.btn}/>
-          <Button title="UNDO" onPress={this.undoDrink} style={styles.btn}/>
-          <Button title="RESET" onPress={() => this.refs.reset_modal.open()} style={styles.btn}/>
-          
-          <Modal
-            style={[styles.modal, styles.modal1]}
-            ref={"add_modal_success"}
-            onClosed={this.onClose}
-            onOpened={this.onOpen}
-            onClosingState={this.onClosingState}>
-              <Text style={styles.text}>Drink Added! {'\n'}Swipe to exit</Text>
-          </Modal>
-
-          <Modal
-            style={[styles.modal, styles.modal1]}
-            ref={"add_modal_failed"}
-            onClosed={this.onClose}
-            onOpened={this.onOpen}
-            onClosingState={this.onClosingState}>
-              <Text style={styles.text}>Limit reached! {'\n'}Swipe to exit</Text>
-          </Modal>
-          
-          <Modal 
-            style={[styles.modal, styles.modal4]} 
-            position={"bottom"} 
-            ref={"reset_modal"}
-            onOpened={this.onOpen}
-            onClosed={this.onClose}>
-
-            <Text style={styles.text}>Are you sure? {'\n'}This will reset your drink count!</Text>
-            <Button   
-              title={`YES!`} 
-              onPress={this.resetDrink} 
-              style={styles.btn}/>
-
-            <Button 
-              title={`NO!`} 
-              onPress={() => this.refs.reset_modal.close()} 
-
-              style={styles.btn}/>
-          </Modal>
-
-          <Modal isOpen={this.state.isOpen} 
-                 onClosed={() => this.setState({isOpen: false})} 
-                 ref={"undo_modal"}
-                 style={[styles.modal, styles.modal4]} 
-                 position={"center"} 
-                 backdropPressToClose={false} 
-                 backdropContent={BContent}>
-            <Text style={styles.text}>Drink undone!</Text>
-          </Modal>
-        </View>
-      </View>
+      dashboards
     );
   }
-
 }
 
-const styles = StyleSheet.create({
 
-  wrapper: {
-    paddingTop: 50,
-    paddingBottom: 32,
-    paddingLeft: 80,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    backgroundColor: 'white'
-  },
-
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor:'slategray'
-  },
-
-  modal4: {
-    height: 300,
-    color: 'white'
-  },
-
-  btn: {
-    margin: 10,
-    backgroundColor: "#3B5998",
-    color: "white",
-    padding: 10
-  },
-
-  btnModal: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    width: 50,
-    height: 50,
-    backgroundColor: "transparent"
-  },
-
-  text: {
-    color: "white",
-    fontSize: 20
-  }
-
-});

@@ -24,8 +24,6 @@ export default class JoinScreen extends Component {
 
  		const username = navigation.getParam("name");
  		const group_key = this.state.group_key;
-
- 		
 		
 		var ref = firebase.database().ref('/groups');
 		ref.orderByChild("group_key")

@@ -12,8 +12,8 @@ export default class LimitScreen extends Component {
 	constructor(props){
 		super(props);
 
-		this.onChanged = this.onChanged.bind(this)
-
+		this.onChanged = this.onChanged.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
 		this.state = {
 	    	limit: 0,
 	    	limitError: "",
@@ -34,20 +34,39 @@ export default class LimitScreen extends Component {
 		        limit: limit,
 		        limitError: ""
 		    });
-		    firebase.database().ref('/groups/' + unique_key + "/" + username).update({
-		    		"Drinks Limit" : parseInt(this.state.limit),
-		    		"Drinks" : 0
-			})
-			.then((snap) => {
-				console.log('Drink limit set');
-			})
-			.catch((error) => {
-				console.log(error)
-			});
+		    
 		} else {
 			this.setState({ limitError: "Limit on drinks is not greater than 0"})
 		}
 	}
+
+	onSubmit() {
+		const { navigation } = this.props;
+		const unique_key = navigation.getParam("unique_key");
+		const username = navigation.getParam("name");
+		const group_key = navigation.getParam("group_key");
+
+		const drinks_limit = this.state.limit;
+
+		console.log("Setting limit");
+
+	    firebase.database().ref('/groups/' + unique_key + "/" + username).update({
+	    		"Drinks Limit" : parseInt(this.state.limit),
+	    		"Drinks" : 0
+		})
+		.then((snap) => {
+			console.log('Drink limit set');
+			navigation.navigate("Home", {
+				drinks_limit: drinks_limit,
+				unique_key: unique_key,
+	    		name: username,
+	    		group_key: group_key});
+		})
+		.catch((error) => {
+			console.log(error)
+		});
+	}
+
 	render() {
 		const { navigation } = this.props;
 		const unique_key = navigation.getParam("unique_key");
@@ -76,12 +95,7 @@ export default class LimitScreen extends Component {
 
 				<Button
 					title="Ok"
-					onPress={() => navigation.navigate("Home", {
-					drinks_limit: drinks_limit,
-					unique_key: unique_key,
-		    		name: username,
-		    		group_key: group_key
-				})}
+					onPress={this.onSubmit}
 				/>   	
 
 			</View>
