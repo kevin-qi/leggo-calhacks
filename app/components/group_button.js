@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
 import { Alert, Button, View, Text } from 'react-native';
-import { withNavigation } from 'react-navigation'
 
 class GroupButton extends Component{
-	constructor(props) {
-		super(props);
-	}
-
 	render () {
-		const {navigation} = this.props;
-
 		return (
 			<View style={{ 
 			   flex: 1,
@@ -25,4 +18,4 @@ class GroupButton extends Component{
 	}
 }
 
-export default withNavigation(GroupButton);
+export default GroupButton;

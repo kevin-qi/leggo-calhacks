@@ -1,5 +1,5 @@
-  
-import React from 'react';
+import React, { Component } from 'react';
+
 import Modal from 'react-native-modalbox';
 import Limit_Drinks from '../components/limit_drinks'
 import Drink_Counter from '../components/drink_counter'
@@ -16,16 +16,19 @@ import {
 
 var screen = Dimensions.get('window');
 
-export default class Button_Control extends React.Component {
+export default class Button_Control extends Component{
 
   constructor() {
     super();
     this.state = {
       isOpen: false,
       isDisabled: false,
-      swipeToClose: true,
-      sliderValue: 0.3
+      sliderValue: 0.3,
+      num_drinks: 0
     };
+
+    this.addDrink = this.addDrink.bind(this);
+    this.undoDrink = this.undoDrink.bind(this);
   }
 
   onClose() {
@@ -40,7 +43,20 @@ export default class Button_Control extends React.Component {
     console.log('the open/close of the swipeToClose just changed');
   }
 
+  addDrink() {
+    this.setState({num_drinks: this.state.num_drinks + 1});
+    this.refs.add_modal.open();
+  }
+
+  undoDrink() {
+    this.setState({num_drinks: this.state.num_drinks - 1});
+    this.refs.undo_modal.open();
+  }
+
   render() {
+    console.log("Hello")
+    const {navigation} = this.props;
+    const drinks_limit = navigation.getParam('drinks_limit')
     var BContent = (
       <View style={[styles.btn, styles.btnModal]}>
         <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
@@ -48,34 +64,59 @@ export default class Button_Control extends React.Component {
     );
 
     return (
-      <>
-      <>
-      <Limit_Drinks/>
-      </>
-      <Drink_Counter/>
-      <View style={styles.wrapper}>
-        <Button title="ADD" onPress={() => this.refs.modal1.open()} style={styles.btn}/>
-        <Button title="UNDO" onPress={() => this.setState({isOpen: true})} style={styles.btn}/>
-        <Button title="RESET" onPress={() => this.refs.modal4.open()} style={styles.btn}/>
-        <Modal
-          style={[styles.modal, styles.modal1]}
-          ref={"modal1"}
-          swipeToClose={this.state.swipeToClose}
-          onClosed={this.onClose}
-          onOpened={this.onOpen}
-          onClosingState={this.onClosingState}>
-            <Text style={styles.text}>Drink Added! {'\n'}Swipe to exit</Text>
-        </Modal>
-        <Modal style={[styles.modal, styles.modal4]} position={"bottom"} ref={"modal4"}>
-          <Text style={styles.text}>                 Are you sure? {'\n'}This will reset your drink count!</Text>
-          <Button title={`YES!(${this.state.swipeToClose ? "true" : "false"})`} onPress={() => this.setState({swipeToClose: !this.state.swipeToClose})} style={styles.btn}/>
-        </Modal>
+      <View style={{ 
+         flex: 1,
+         alignItems:'center',
+         justifyContent:'center'
+      }}>
+        <Drink_Counter num_drinks = {this.state.num_drinks}/>
 
-        <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} style={[styles.modal, styles.modal4]} position={"center"} backdropPressToClose={false} backdropContent={BContent}>
-          <Text style={styles.text}>Drink undone!</Text>
-        </Modal>
+        <Limit_Drinks limit={drinks_limit}/>
+        <View style={styles.wrapper}>
+          
+
+          <Button title="ADD" onPress={this.addDrink} style={styles.btn}/>
+          <Button title="UNDO" onPress={this.undoDrink} style={styles.btn}/>
+          <Button title="RESET" onPress={() => this.refs.reset_modal.open()} style={styles.btn}/>
+          <Modal
+            style={[styles.modal, styles.modal1]}
+            ref={"add_modal"}
+            onClosed={this.onClose}
+            onOpened={this.onOpen}
+            onClosingState={this.onClosingState}>
+              <Text style={styles.text}>Drink Added! {'\n'}Swipe to exit</Text>
+          </Modal>
+          <Modal 
+            style={[styles.modal, styles.modal4]} 
+            position={"bottom"} 
+            ref={"reset_modal"}
+            onOpened={this.onOpen}
+            onClosed={this.onClose}>
+
+            <Text style={styles.text}>Are you sure? {'\n'}This will reset your drink count!</Text>
+            <Button 
+              title={`YES!`} 
+              onPress={() => this.setState({num_drinks: 0})} 
+              style={styles.btn}/>
+
+            <Button 
+              title={`NO!`} 
+              onPress={() => this.refs.reset_modal.close()} 
+
+              style={styles.btn}/>
+          </Modal>
+
+          <Modal isOpen={this.state.isOpen} 
+                 onClosed={() => this.setState({isOpen: false})} 
+                 ref={"undo_modal"}
+                 style={[styles.modal, styles.modal4]} 
+                 position={"center"} 
+                 backdropPressToClose={false} 
+                 backdropContent={BContent}>
+            <Text style={styles.text}>Drink undone!</Text>
+          </Modal>
+        </View>
       </View>
-      </>
     );
   }
 
@@ -102,7 +143,7 @@ const styles = StyleSheet.create({
 
   modal4: {
     height: 300,
-    color:'white'
+    color: 'white'
   },
 
   btn: {

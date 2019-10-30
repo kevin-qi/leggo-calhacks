@@ -51,11 +51,7 @@ export default class LimitScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 
-
-		const unique_key = JSON.stringify(navigation.getParam("unique_key"));
-		const username = JSON.stringify(navigation.getParam("name"));
-		const group_key = JSON.stringify(navigation.getParam("group_key"));
-		const drink_limit = this.state.limit;
+		const drinks_limit = this.state.limit;
 		return (
 			<View style={{ 
 			   flex: 1,
@@ -78,10 +74,7 @@ export default class LimitScreen extends Component {
 				<Button
 					title="Ok"
 					onPress={() => navigation.navigate("Home", {
-					name: username,
-					unique_key: unique_key,
-					group_key: group_key,
-					drink_limit: drink_limit
+					drinks_limit: drinks_limit
 				})}
 				/>   	
 

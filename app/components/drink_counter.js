@@ -4,6 +4,7 @@ import { Alert, Button, View, Text } from 'react-native';
 export default class Drink_Counter extends Component {
 
   render() {
+    console.log(this.props.num_drinks)
     return(
       <>
       <Text style={{
@@ -22,7 +23,7 @@ export default class Drink_Counter extends Component {
         textAlign: 'center',
         backgroundColor: 'white'
       }}>
-      {0}
+      {this.props.num_drinks}
       </Text>
       </>
     )

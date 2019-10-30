@@ -11,7 +11,7 @@ export default class Limit_Drinks extends Component {
         textAlign: 'center',
         backgroundColor:'white'
       }}>
-      {'Drink Limit:'}
+      {'Drink limit: '+this.props.limit}
       </Text>
     )
   }
