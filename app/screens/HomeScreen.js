@@ -44,19 +44,27 @@ export default class Button_Control extends Component{
   }
 
   addDrink() {
-    this.setState({num_drinks: this.state.num_drinks + 1});
-    this.refs.add_modal.open();
+    if(this.state.num_drinks >= this.drinks_limit){
+      this.refs.add_modal_failed.open();
+    }
+    else {
+      this.setState({num_drinks: this.state.num_drinks + 1});
+      this.refs.add_modal_success.open();
+    }
   }
 
   undoDrink() {
-    this.setState({num_drinks: this.state.num_drinks - 1});
-    this.refs.undo_modal.open();
+    if(this.state.num_drinks > 0){
+      this.setState({num_drinks: this.state.num_drinks - 1});
+      this.refs.undo_modal.open();
+    }
   }
 
   render() {
     console.log("Hello")
     const {navigation} = this.props;
     const drinks_limit = navigation.getParam('drinks_limit')
+    this.drinks_limit = drinks_limit
     var BContent = (
       <View style={[styles.btn, styles.btnModal]}>
         <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
@@ -78,14 +86,25 @@ export default class Button_Control extends Component{
           <Button title="ADD" onPress={this.addDrink} style={styles.btn}/>
           <Button title="UNDO" onPress={this.undoDrink} style={styles.btn}/>
           <Button title="RESET" onPress={() => this.refs.reset_modal.open()} style={styles.btn}/>
+          
           <Modal
             style={[styles.modal, styles.modal1]}
-            ref={"add_modal"}
+            ref={"add_modal_success"}
             onClosed={this.onClose}
             onOpened={this.onOpen}
             onClosingState={this.onClosingState}>
               <Text style={styles.text}>Drink Added! {'\n'}Swipe to exit</Text>
           </Modal>
+
+          <Modal
+            style={[styles.modal, styles.modal1]}
+            ref={"add_modal_failed"}
+            onClosed={this.onClose}
+            onOpened={this.onOpen}
+            onClosingState={this.onClosingState}>
+              <Text style={styles.text}>Limit reached! {'\n'}Swipe to exit</Text>
+          </Modal>
+          
           <Modal 
             style={[styles.modal, styles.modal4]} 
             position={"bottom"} 
