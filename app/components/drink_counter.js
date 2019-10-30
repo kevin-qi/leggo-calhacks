@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Alert, Button, View, Text } from 'react-native';
-import Counter from '../Counter';
 
 export default class Drink_Counter extends Component {
 
