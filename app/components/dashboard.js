@@ -95,6 +95,10 @@ export default class Dashboard extends Component{
   render() {
     console.log("Hello")
 
+    if(this.props.visible == false){
+    	return (null);
+    }
+
     var BContent = (
       <View style={[styles.btn, styles.btnModal]}>
         <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
@@ -102,10 +106,9 @@ export default class Dashboard extends Component{
     );
 
     return (
+
       <View style={{ 
-         flex: 1,
-         alignItems:'center',
-         justifyContent:'center'
+         flex: 1
       }}>
         <Drink_Counter num_drinks = {this.props.num_drinks}/>
 

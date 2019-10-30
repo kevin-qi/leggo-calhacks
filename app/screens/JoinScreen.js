@@ -28,7 +28,7 @@ export default class JoinScreen extends Component {
 		var ref = firebase.database().ref('/groups');
 		ref.orderByChild("group_key")
 		.equalTo(group_key)
-		.on("value", (snap) => {
+		.once("value", (snap) => {
 			console.log(group_key);
 			const key  = Object.keys(snap.val())[0];
 			console.log(snap);

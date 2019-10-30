@@ -36,11 +36,15 @@ export default class LimitScreen extends Component {
 		    });
 		    
 		} else {
-			this.setState({ limitError: "Limit on drinks is not greater than 0"})
+			this.setState({ limitError: "Drink limit must be positive"})
 		}
 	}
 
 	onSubmit() {
+		if(this.state.limit == 0){
+			this.setState({limitError: "Drink limit must be positive"})
+			return;
+		}
 		const { navigation } = this.props;
 		const unique_key = navigation.getParam("unique_key");
 		const username = navigation.getParam("name");
