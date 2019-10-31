@@ -110,11 +110,13 @@ export default class Dashboard extends Component{
       <View style={{ 
          flex: 1
       }}>
+
         <Drink_Counter num_drinks = {this.props.num_drinks}/>
 
         <Limit_Drinks limit={this.props.drinks_limit}/>
+        
+
         <View style={styles.wrapper}>
-          
 
           <Button title="ADD" onPress={this.addDrink} style={styles.btn}/>
           <Button title="UNDO" onPress={this.undoDrink} style={styles.btn}/>

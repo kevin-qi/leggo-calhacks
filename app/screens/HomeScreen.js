@@ -71,12 +71,15 @@ export default class HomeScreen extends Component{
 
     return (
       <View style={{ 
-         flex: 1
+         flex: 1,
+         alignItems:'center',
+         justifyContent:'center'
       }}>
         <Button 
           title = "Next page"
           onPress = {this.nextPage}
         />
+        <Text>{"Group key: "+this.group_key}</Text>
         {dashboards}
       </View>
     );
