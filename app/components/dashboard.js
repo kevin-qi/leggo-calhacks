@@ -97,12 +97,6 @@ export default class Dashboard extends Component{
     	return (null);
     }
 
-    var BContent = (
-      <View style={[styles.btn, styles.btnModal]}>
-        <Button title="X" color="white" onPress={() => this.setState({isOpen: false})}/>
-      </View>
-    );
-
     return (
 
       <View style={{ 
@@ -115,6 +109,7 @@ export default class Dashboard extends Component{
           fontSize: 20,
           flex: 1,
           textAlign: 'center',
+          justifyContent: 'center',
         }}>
           {'Group: '+ this.props.group_key}
         </Text>
@@ -124,6 +119,7 @@ export default class Dashboard extends Component{
           flex: 1,
           textAlign: 'center',
           fontWeight: 'bold',
+          justifyContent: 'center',
         }}>
           {this.props.username}
         </Text>
@@ -133,15 +129,17 @@ export default class Dashboard extends Component{
           flex: 1,
           textAlign: 'center',
           fontWeight: 'bold',
+          justifyContent: 'center',
         }}>
           {'Drink Number:'}
         </Text>
 
         <Text style={{
-          flex: 6,
+          flex: 5,
           fontSize: 125,
           fontWeight: 'bold',
           textAlign: 'center',
+          justifyContent: 'center',
         }}>
           {this.props.num_drinks}
         </Text>
@@ -151,6 +149,7 @@ export default class Dashboard extends Component{
           flex: 1,
           fontWeight: 'bold',
           textAlign: 'center',
+          justifyContent: 'center',
         }}>
           {'Drink limit: '+this.props.drinks_limit}
         </Text>
@@ -168,7 +167,7 @@ export default class Dashboard extends Component{
         </View>
 
         <Modal
-            style={[styles.modal, styles.modal1]}
+            style={[styles.modal, styles.modal4]}
             ref={"add_modal_success"}
             onClosed={this.onClose}
             onOpened={this.onOpen}
@@ -177,7 +176,7 @@ export default class Dashboard extends Component{
           </Modal>
 
           <Modal
-            style={[styles.modal, styles.modal1]}
+            style={[styles.modal, styles.modal4]}
             ref={"add_modal_failed"}
             onClosed={this.onClose}
             onOpened={this.onOpen}
@@ -189,9 +188,7 @@ export default class Dashboard extends Component{
                  onClosed={() => this.setState({isOpen: false})} 
                  ref={"undo_modal"}
                  style={[styles.modal, styles.modal4]} 
-                 position={"center"} 
-                 backdropPressToClose={false} 
-                 backdropContent={BContent}>
+                 position={"center"} >
             <Text style={styles.text}>Drink undone!</Text>
           </Modal>
       </View>
@@ -215,13 +212,14 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'slategray',
+    backgroundColor:'#40DDD2',
     margin: 'auto'
   },
 
   modal4: {
     height: 300,
     color: 'white',
+    backgroundColor:'#40DDD2',
     margin: 'auto'
   },
 
@@ -229,15 +227,6 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     height: 40,
-  },
-
-  btnModal: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    width: 50,
-    height: 50,
-    backgroundColor: "transparent"
   },
 
   text: {
