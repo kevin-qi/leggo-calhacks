@@ -161,8 +161,8 @@ export default class Dashboard extends Component{
           justifyContent: 'space-between',
         }}>
 
-          <Button title="Add a Drink" onPress={this.addDrink} style={styles.btn}/>
-          <Button title="Undo" onPress={this.undoDrink} style={styles.btn}/>
+          <Button title="Add a Drink" color="#40DDD2" onPress={this.addDrink} style={styles.btn}/>
+          <Button title="Undo" color="#40DDD2" onPress={this.undoDrink} style={styles.btn}/>
           
 
         </View>
@@ -227,7 +227,6 @@ const styles = StyleSheet.create({
 
   btn: {
     margin: 10,
-    color: "#40DDD2",
     padding: 10,
     height: 40,
   },
