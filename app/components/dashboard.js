@@ -108,7 +108,7 @@ export default class Dashboard extends Component{
       <View style={{ 
          flex: 1,
          justifyContent: 'space-between',
-         backgroundColor: 'white',
+         backgroundColor: '#F1FFFE',
       }}>
 
         <Text style={{
@@ -158,7 +158,7 @@ export default class Dashboard extends Component{
         <View style={{
           flex: 1,
           flexDirection: 'row',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
         }}>
 
           <Button title="Add a Drink" onPress={this.addDrink} style={styles.btn}/>
@@ -227,9 +227,9 @@ const styles = StyleSheet.create({
 
   btn: {
     margin: 10,
-    color: "#C0B9CD",
+    color: "#40DDD2",
     padding: 10,
-    height: 50
+    height: 40,
   },
 
   btnModal: {

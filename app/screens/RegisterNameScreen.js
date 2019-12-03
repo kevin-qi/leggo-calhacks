@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextInput, Button, View, Text } from 'react-native';
+import { TextInput, Button, View, Text, StyleSheet} from 'react-native';
 
 import CreateGroupButton from '../components/create_group_button'
 
@@ -34,7 +34,7 @@ export default class RegisterNameScreen extends Component {
 		const SmartButton = () => {
 			if(this.state.name == "" || this.state.limit <= 0){
 				return (<Button
-					title = "Ok"
+					title = "Start drinking! (Safely)"
 					disabled
 					onPress = {() => {navigate('RegisterGroup', 
 								{name: this.state.name,
@@ -42,7 +42,8 @@ export default class RegisterNameScreen extends Component {
 					/>)
 			} else {
 				return (<Button
-					title = "Ok"
+					title = "Start drinking! (Safely)"
+					color = '#40DDD2'
 					onPress = {() => {navigate('RegisterGroup', 
 								{name: this.state.name,
 								 drink_limit: this.state.limit})}}
@@ -54,31 +55,69 @@ export default class RegisterNameScreen extends Component {
 			<View style={{ 
 			   flex: 1,
 			   alignItems:'center',
-			   justifyContent:'center'
+			   justifyContent:'center',
+			   backgroundColor: '#F1FFFE'
 			}}>
-				<TextInput
-					style = {{height: 40}}
-					placeholder = "Enter your name"
-					onChangeText = {(str) => this.setState({name: str})}
-					//value = this.state.text
-				/>
+				<View style={{ 
+				   flex: 1,
+				   alignItems:'center',
+				   justifyContent:'center'
+				}}>
+				</View>
 
-				<TextInput 
-			       style={{height: 40}}
-				   keyboardType='numeric'
-				   placeholder = "Enter your drink limit"
-				   onEndEditing = {(text)=> this.onChanged(this.state.limit)}
-				   onChangeText = {(text)=> this.setState({limit: text})}
-				   maxLength={10}  //setting limit of input
-				/>
+				<View style={{ 
+				   flex: 2,
+				   alignItems:'center',
+				   justifyContent:'space-around'
+				}}>
 
-				{!!this.state.limitError && (
-  					<Text style={{color: 'red'}}>"ERROR"</Text>
-				)}
+					<TextInput
+						style = {styles.textInput}
+						placeholder = "Enter your name"
+						onChangeText = {(str) => this.setState({name: str})}
+						//value = this.state.text
+					/>
+					
+
+					<TextInput 
+				       style={styles.textInput}
+					   keyboardType='numeric'
+					   placeholder = "Enter your drink limit"
+					   onEndEditing = {(text)=> this.onChanged(this.state.limit)}
+					   onChangeText = {(text)=> this.setState({limit: text})}
+					   maxLength={10}  //setting limit of input
+					/>
+
+					{!!this.state.limitError && (
+	  					<Text style={{color: 'black'}}>"Please enter a valid drink limit"</Text>
+					)}
+
+					<SmartButton />
+				</View>
 				
-				<SmartButton />
+
+				<View style={{ 
+				   flex: 1,
+				   alignItems:'center',
+				   justifyContent:'center'
+				}}>
+				</View>
+				
+				
 				
 			</View>
 		);
 	};
 }
+
+const styles = StyleSheet.create({
+
+  textInput: {
+	height: 40,
+	paddingLeft: 0,
+	paddingRight: 0,
+	borderBottomWidth: 1,
+	borderBottomColor: '#B8FFF9',
+  }
+
+});

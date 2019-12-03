@@ -60,7 +60,8 @@ export default class RegisterGroupScreen extends Component {
 			<View style={{ 
 			   flex: 1,
 			   alignItems:'center',
-			   justifyContent:'center'
+			   justifyContent:'center',
+			   backgroundColor: '#F1FFFE'
 			}}>
 				< GroupButton button_name="Create group" name={username} func={this.generateGroup}/>
 				< GroupButton button_name="Join group" name={username} func={() => navigation.navigate("Join", {name: username, drink_limit: drink_limit})} />

@@ -11,6 +11,7 @@ class GroupButton extends Component{
 			}}> 
 				<Button 
 					title = {this.props.button_name}
+					color = '#40DDD2'
 					onPress = {this.props.func}
 				/>
 			</View>
