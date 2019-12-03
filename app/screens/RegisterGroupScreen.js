@@ -20,13 +20,14 @@ export default class RegisterGroupScreen extends Component {
 
 	generateGroup() {
 		const username = this.props.navigation.getParam('name');
+		const drink_limit = this.props.navigation.getParam('drink_limit');
 		const {navigate} = this.props.navigation;
 		var db_ref = firebase.database();
 		
 		db_ref.ref('/groups').push({
 			[username]: {
 				"Drinks": 0,
-				"Drinks Limit": 0
+				"Drinks Limit": [drink_limit]
 			}
 		})
 		.then((snap) => {
@@ -34,15 +35,15 @@ export default class RegisterGroupScreen extends Component {
 			const key  = snap.key;
 			const group_key = key.slice(key.length-6,key.length)
 			db_ref.ref("/groups/"+key).update({
-				"group_key": group_key
+				"group_key": group_key.toLowerCase()
 			})
 			.then((snap) => {
 				console.log('Group creation successful');
 
-				navigate("Limit", {
+				navigate("Home", {
 					name: username,
 					unique_key: key,
-					group_key: group_key
+					group_key: group_key.toLowerCase()
 				})
 			})
 		})
@@ -54,7 +55,7 @@ export default class RegisterGroupScreen extends Component {
 	render() {
 		const { navigation } = this.props;
 		const username = navigation.getParam('name', "Null");
-		
+		const drink_limit = navigation.getParam('drink_limit');
 		return (
 			<View style={{ 
 			   flex: 1,
@@ -62,7 +63,7 @@ export default class RegisterGroupScreen extends Component {
 			   justifyContent:'center'
 			}}>
 				< GroupButton button_name="Create group" name={username} func={this.generateGroup}/>
-				< GroupButton button_name="Join group" name={username} func={() => navigation.navigate("Join", {name: username})} />
+				< GroupButton button_name="Join group" name={username} func={() => navigation.navigate("Join", {name: username, drink_limit: drink_limit})} />
 			</View>
 			
 		);

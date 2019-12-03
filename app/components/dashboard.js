@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import Modal from 'react-native-modalbox';
-import Limit_Drinks from './limit_drinks'
-import Drink_Counter from './drink_counter'
 
 import {
   Text,
@@ -108,21 +106,68 @@ export default class Dashboard extends Component{
     return (
 
       <View style={{ 
-         flex: 1
+         flex: 1,
+         justifyContent: 'space-between',
+         backgroundColor: 'white',
       }}>
 
-        <Drink_Counter num_drinks = {this.props.num_drinks}/>
+        <Text style={{
+          fontSize: 20,
+          flex: 1,
+          textAlign: 'center',
+        }}>
+          {'Group: '+ this.props.group_key}
+        </Text>
 
-        <Limit_Drinks limit={this.props.drinks_limit}/>
-        
+        <Text style={{
+          fontSize: 20,
+          flex: 1,
+          textAlign: 'center',
+          fontWeight: 'bold',
+        }}>
+          {this.props.username}
+        </Text>
 
-        <View style={styles.wrapper}>
+        <Text style={{
+          fontSize: 20,
+          flex: 1,
+          textAlign: 'center',
+          fontWeight: 'bold',
+        }}>
+          {'Drink Number:'}
+        </Text>
 
-          <Button title="ADD" onPress={this.addDrink} style={styles.btn}/>
-          <Button title="UNDO" onPress={this.undoDrink} style={styles.btn}/>
-          <Button title="RESET" onPress={() => this.refs.reset_modal.open()} style={styles.btn}/>
+        <Text style={{
+          flex: 6,
+          fontSize: 125,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        }}>
+          {this.props.num_drinks}
+        </Text>
+
+        <Text style={{
+          fontSize: 20,
+          flex: 1,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        }}>
+          {'Drink limit: '+this.props.drinks_limit}
+        </Text>
+
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
+
+          <Button title="Add a Drink" onPress={this.addDrink} style={styles.btn}/>
+          <Button title="Undo" onPress={this.undoDrink} style={styles.btn}/>
           
-          <Modal
+
+        </View>
+
+        <Modal
             style={[styles.modal, styles.modal1]}
             ref={"add_modal_success"}
             onClosed={this.onClose}
@@ -139,26 +184,6 @@ export default class Dashboard extends Component{
             onClosingState={this.onClosingState}>
               <Text style={styles.text}>Limit reached! {'\n'}Swipe to exit</Text>
           </Modal>
-          
-          <Modal 
-            style={[styles.modal, styles.modal4]} 
-            position={"bottom"} 
-            ref={"reset_modal"}
-            onOpened={this.onOpen}
-            onClosed={this.onClose}>
-
-            <Text style={styles.text}>Are you sure? {'\n'}This will reset your drink count!</Text>
-            <Button   
-              title={`YES!`} 
-              onPress={this.resetDrink} 
-              style={styles.btn}/>
-
-            <Button 
-              title={`NO!`} 
-              onPress={() => this.refs.reset_modal.close()} 
-
-              style={styles.btn}/>
-          </Modal>
 
           <Modal isOpen={this.state.isOpen} 
                  onClosed={() => this.setState({isOpen: false})} 
@@ -169,7 +194,6 @@ export default class Dashboard extends Component{
                  backdropContent={BContent}>
             <Text style={styles.text}>Drink undone!</Text>
           </Modal>
-        </View>
       </View>
     );
   }
@@ -191,19 +215,21 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'slategray'
+    backgroundColor:'slategray',
+    margin: 'auto'
   },
 
   modal4: {
     height: 300,
-    color: 'white'
+    color: 'white',
+    margin: 'auto'
   },
 
   btn: {
     margin: 10,
-    backgroundColor: "#3B5998",
-    color: "white",
-    padding: 10
+    color: "#C0B9CD",
+    padding: 10,
+    height: 50
   },
 
   btnModal: {
@@ -221,3 +247,27 @@ const styles = StyleSheet.create({
   }
 
 });
+
+/*
+<Button title="RESET" onPress={() => this.refs.reset_modal.open()} style={styles.btn}/>
+
+<Modal 
+            style={[styles.modal, styles.modal4]} 
+            position={"bottom"} 
+            ref={"reset_modal"}
+            onOpened={this.onOpen}
+            onClosed={this.onClose}>
+
+            <Text style={styles.text}>Are you sure? {'\n'}This will reset your drink count!</Text>
+            <Button   
+              title={`YES!`} 
+              onPress={this.resetDrink} 
+              style={styles.btn}/>
+
+            <Button 
+              title={`NO!`} 
+              onPress={() => this.refs.reset_modal.close()} 
+
+              style={styles.btn}/>
+          </Modal>
+*/

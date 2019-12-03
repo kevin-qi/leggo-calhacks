@@ -23,21 +23,33 @@ export default class JoinScreen extends Component {
  		const { navigate } = this.props.navigation;
 
  		const username = navigation.getParam("name");
+ 		const drink_limit = navigation.getParam("drink_limit");
  		const group_key = this.state.group_key;
 		
 		var ref = firebase.database().ref('/groups');
 		ref.orderByChild("group_key")
-		.equalTo(group_key)
+		.equalTo(group_key.toLowerCase())
 		.once("value", (snap) => {
 			console.log(group_key);
 			const key  = Object.keys(snap.val())[0];
 			console.log(snap);
 			console.log(key);
-			navigate("Limit", {
-				name: username,
-				unique_key: key,
-				group_key: group_key
+
+			firebase.database().ref('/groups/' + key + "/" + username).update({
+	    		"Drinks Limit" : drink_limit,
+	    		"Drinks" : 0
 			})
+			.then((snap) => {
+				console.log('Drink limit set');
+				navigation.navigate("Home", {
+					drinks_limit: drink_limit,
+					unique_key: key,
+		    		name: username,
+		    		group_key: group_key});
+			})
+			.catch((error) => {
+				console.log(error)
+			});
 		});
 	}
 

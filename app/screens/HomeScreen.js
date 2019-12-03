@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View , Button , Text } from 'react-native';
+import Swiper from 'react-native-swiper'
 
 import Dashboard from '../components/dashboard';
 
@@ -31,6 +32,18 @@ export default class HomeScreen extends Component{
   }
 
   sync(data){
+    /*<View style={{ 
+         flex: 1,
+         alignItems:'center',
+         justifyContent:'center'
+      }}>
+        <Button 
+          title = "Next page"
+          onPress = {this.nextPage}
+        />
+        <Text>{"Group key: "+this.group_key}</Text>
+        {dashboards}
+      </View>*/
     console.log("Syncing group data")
     console.log(data);
     delete data["group_key"];
@@ -56,7 +69,7 @@ export default class HomeScreen extends Component{
       var dashboards = keys.map((key) => {
         return(<Dashboard 
           key = {key}
-          visible = {key == this.state.page_name}
+          visible = {true}
           username = {key}
           num_drinks = {this.state.group_data[key].Drinks}
           drinks_limit = {this.state.group_data[key]["Drinks Limit"]}
@@ -68,20 +81,15 @@ export default class HomeScreen extends Component{
     } else {
       var dashboards = <Text>Loading</Text>;
     }
-
+    console.log(this.group_key);
     return (
-      <View style={{ 
-         flex: 1,
-         alignItems:'center',
-         justifyContent:'center'
-      }}>
-        <Button 
-          title = "Next page"
-          onPress = {this.nextPage}
-        />
-        <Text>{"Group key: "+this.group_key}</Text>
+      <Swiper
+        loop={false}
+        showsPagination={true}
+        index={1}>
         {dashboards}
-      </View>
+      </Swiper>
+
     );
   }
 }
