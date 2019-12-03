@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { TextInput, Button, View, Text } from 'react-native';
 
 import CreateGroupButton from '../components/create_group_button'
+import GroupButton from '../components/group_button';
+
 import firebase from '../firebase_init.js';
 
 
@@ -69,10 +71,10 @@ export default class JoinScreen extends Component {
 					//value = this.state.text
 				/>
 
-				<Button 
-					title = "Create group"
-					onPress = {this.joinGroup}
-				/>
+				< GroupButton 
+					button_name="Join group" 
+					name={this.props.username} 
+					func={this.joinGroup} />
 			</View>
 		);
 	};
