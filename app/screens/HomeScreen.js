@@ -17,6 +17,13 @@ export default class HomeScreen extends Component{
     this.nextPage = this.nextPage.bind(this);
   }
 
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: '#3adae0',
+    },
+    headerTintColor: 'white'
+  };
+
   componentDidMount() {
     const {navigation} = this.props;
     this.unique_key = navigation.getParam('unique_key');

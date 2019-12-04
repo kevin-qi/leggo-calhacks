@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TextInput, Button, View, Text, StyleSheet} from 'react-native';
 
-import CreateGroupButton from '../components/create_group_button'
+import CreateGroupButton from '../components/create_group_button';
 
 export default class RegisterNameScreen extends Component {
 	constructor(props) {

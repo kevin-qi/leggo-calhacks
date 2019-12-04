@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import Modal from 'react-native-modalbox';
 import QRCode from 'react-native-qrcode';
 
+import { LinearGradient } from 'expo-linear-gradient';
+
+
 import {
   Text,
   Button,
@@ -107,21 +110,12 @@ export default class Dashboard extends Component{
     };
 
     return (
-
-      <View style={{ 
-         flex: 1,
-         justifyContent: 'space-between',
-         backgroundColor: '#F1FFFE',
-      }}>
-
-        <Text style={{
-          fontSize: 20,
+      <LinearGradient
+        colors={['#3adae0','#F1FFFE']}
+        style={{ 
           flex: 1,
-          textAlign: 'center',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
         }}>
-          {'Group: '+ this.props.group_key}
-        </Text>
 
         <Text style={{
           fontSize: 20,
@@ -203,13 +197,24 @@ export default class Dashboard extends Component{
         onClosed={this.onClose}
         onOpened={this.onOpen}
         onClosingState={this.onClosingState}>
-          <QRCode
-            value={this.props.group_key}
-            size={200}
-          />
-          <Text>Swipe down to close</Text>
+          <View style={{
+            flex:1,
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}>
+            <Text style={{justifyContent:'center', alignItems: 'center'}}>{'Group key: '+ this.props.group_key}</Text>
+            <View style={{overflow:'hidden'}}>
+              <QRCode
+                value={this.props.group_key}
+                size={150}
+                fgColor='#40DDD2'
+              />
+            </View>
+
+            <Text style={{justifyContent:'center', alignItems: 'center'}}>Swipe down to close</Text>
+          </View>
         </Modal>
-      </View>
+      </LinearGradient>
     );
   }
 }
