@@ -23,7 +23,7 @@ export default class HomeScreen extends Component{
     this.group_key = navigation.getParam('group_key');
     this.setState({page_name: navigation.getParam('name')});
 
-    
+    console.log("homescreen unique key: "+this.unique_key)
     firebase.database().ref('/groups/'+this.unique_key).on('value',
       (snap, context) => {
         this.sync(snap.val());

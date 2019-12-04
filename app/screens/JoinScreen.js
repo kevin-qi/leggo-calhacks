@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { TextInput, Button, View, Text } from 'react-native';
 
-import CreateGroupButton from '../components/create_group_button'
+import CreateGroupButton from '../components/create_group_button';
 import GroupButton from '../components/group_button';
-
+import GroupManager from '../utils/group_manager.js';
 import firebase from '../firebase_init.js';
 
 
@@ -18,70 +18,71 @@ export default class JoinScreen extends Component {
 			group_key : "",
 			error: ""
 		}
-		this.joinGroup = this.joinGroup.bind(this)
+		this.error_func = this.error_func.bind(this)
 	}
 
-	joinGroup() {
-		const { navigation } = this.props
- 		const { navigate } = this.props.navigation;
 
+	error_func() {
+		this.setState({error: "Invalid group key"});
+	}
+
+
+	render() {
+		const { navigation } = this.props
  		const username = navigation.getParam("name");
  		const drink_limit = navigation.getParam("drink_limit");
  		const group_key = this.state.group_key;
-		
-		var ref = firebase.database().ref('/groups');
-		ref.orderByChild("group_key")
-		.equalTo(group_key.toLowerCase())
-		.once("value", (snap) => {
-			console.log(snap);
-			console.log(group_key);
-			if(snap.val() == null){
-				this.setState({error: "Invalid group key"})
-				return;
-			}
-			const key  = Object.keys(snap.val())[0];
-			console.log(key);
 
-			firebase.database().ref('/groups/' + key + "/" + username).update({
-	    		"Drinks Limit" : drink_limit,
-	    		"Drinks" : 0
-			})
-			.then((snap) => {
-				console.log('Drink limit set');
-				navigation.navigate("Home", {
-					drinks_limit: drink_limit,
-					unique_key: key,
-		    		name: username,
-		    		group_key: group_key});
-			})
-			.catch((error) => {
-				console.log(error)
-			});
-		});
-	}
-
-	render() {
-		const {navigate} = this.props.navigation;
+ 		const joinGroup = () => {
+ 			GroupManager.joinGroup(username, drink_limit, group_key, navigation.navigate, this.error_func);
+ 		}
 
 		return (
 			<View style={{ 
 			   flex: 1,
 			   alignItems:'center',
-			   justifyContent:'center'
+			   justifyContent:'space-around'
 			}}>
-				<TextInput
-					style = {{height: 40}}
-					placeholder = "Enter group key"
-					onChangeText = {(str) => this.setState({group_key: str})}
-					//value = this.state.text
-				/>
+				<View style={{ 
+				   flex: 1,
+				   alignItems:'center',
+				   justifyContent:'center'
+				}}>
+					<GroupButton
+						button_name="Scan QR Code"
+						name={this.props.username}
+						func={() => {navigation.navigate("QR", {
+							name: username,
+							drink_limit: drink_limit
+						})}}
+					/>
+				</View>
 
-				<Text style={{color:'red'}}>{this.state.error}</Text>
+				<View style={{flexDirection: 'row'}}>
+				    <View style={{backgroundColor: '#B8FFF9', height: 1, flex: 1, alignSelf: 'center'}} />
+				</View>
+					
+				<View style={{ 
+				   flex: 1,
+				   alignItems:'center',
+				   justifyContent:'center'
+				}}>
+					<TextInput
+						style = {{height: 40}}
+						placeholder = "Enter group key"
+						onChangeText = {(str) => this.setState({group_key: str})}
+						//value = this.state.text
+					/>
 
-				< GroupButton 
-					button_name="Join group" 
-					name={this.props.username} 
-					func={this.joinGroup} />
+					<Text style={{color:'red'}}>{this.state.error}</Text>
+
+					<GroupButton 
+						button_name="Join with key" 
+						name={this.props.username} 
+						func={joinGroup}
+					/>
+				</View>
+				
 			</View>
 		);
 

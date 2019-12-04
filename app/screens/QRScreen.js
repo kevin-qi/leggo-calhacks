@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import GroupManager from '../utils/group_manager';
 
 export default class QRScreen extends React.Component {
   state = {
@@ -25,16 +26,13 @@ export default class QRScreen extends React.Component {
     const drink_limit = navigation.getParam("drink_limit"); 
 
     handleBarCodeScanned = ({ type, data }) => {
-        this.setState({ scanned: true });
+      this.setState({ scanned: true });
 
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-        console.log("QR screen unique key:", data);
-        navigation.navigate('Home', {
-            drink_limit: 12,
-            unique_key: data,
-            name: "Henry",
-            group_key: data.slice(data.length-6, data.length)});
-    };
+      alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+      console.log("QR screen unique key:", data);
+      
+      GroupManager.joinGroup(username, drink_limit, data, navigation.navigate, ()=>{})
+    }
 
     if (hasCameraPermission === null) {
       return <Text>Requesting for camera permission</Text>;

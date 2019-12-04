@@ -6,6 +6,7 @@ import RegisterNameScreen from "./screens/RegisterNameScreen";
 import RegisterGroupScreen from "./screens/RegisterGroupScreen";
 import JoinScreen from "./screens/JoinScreen";
 import LimitScreen from "./screens/LimitScreen";
+import QRScreen from "./screens/QRScreen";
 
 const Navigator = createStackNavigator({
 	Home : {
@@ -26,6 +27,10 @@ const Navigator = createStackNavigator({
 
 	Limit : {
 		screen: LimitScreen
+	},
+
+	QR : {
+		screen: QRScreen
 	}
 },
 {

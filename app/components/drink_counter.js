@@ -1,32 +1,34 @@
 import React, { Component } from 'react';
 import { Alert, Button, View, Text } from 'react-native';
+import Swiper from 'react-native-swiper';
 
-export default class Drink_Counter extends Component {
+export default class DrinkCounter extends Component {
 
   render() {
-    console.log(this.props.num_drinks)
-    return(
-      <>
-        <Text style={{
-          fontSize: 20,
-          flex: 1,
-          textAlign: 'center',
-          fontWeight: 'bold',
-          backgroundColor: 'white'
-        }}>
-        {'Drink Number:'}
-        </Text>
-
-        <Text style={{
-          flex: 4,
+    var style= {
+          flex: 5,
           fontSize: 125,
           fontWeight: 'bold',
           textAlign: 'center',
-          backgroundColor: 'white'
-        }}>
-        {this.props.num_drinks}
-        </Text>
-      </>
+          justifyContent: 'center',
+          color: 'black'
+        }
+    console.log(this.props.num_drinks)
+    console.log(this.props.drink_limit)
+    if(this.props.num_drinks>=this.props.drink_limit){
+      
+      style={
+          flex: 5,
+          fontSize: 125,
+          fontWeight: 'bold',
+          textAlign: 'center',
+          justifyContent: 'center',
+          color: 'red'
+        }
+    };
+    console.log(style)
+    return(
+      <Text style={style}>{this.props.num_drinks}</Text>
     )
   }
 }

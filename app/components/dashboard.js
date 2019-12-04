@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Modal from 'react-native-modalbox';
+import QRCode from 'react-native-qrcode';
 
 import {
   Text,
@@ -11,6 +12,8 @@ import {
   Dimensions,
   TextInput
 } from 'react-native';
+
+import DrinkCounter from './drink_counter'
 
 import firebase from '../firebase_init.js';
 
@@ -38,6 +41,7 @@ export default class Dashboard extends Component{
     this.undoDrink = this.undoDrink.bind(this);
     this.syncState = this.syncState.bind(this);
     this.resetDrink = this.resetDrink.bind(this);
+    this.addFriends = this.addFriends.bind(this);
   }
 
   componentDidMount() {
@@ -61,6 +65,7 @@ export default class Dashboard extends Component{
   addDrink() {
     if(this.props.num_drinks >= this.props.drinks_limit){
       this.refs.add_modal_failed.open();
+      this.syncState(this.props.num_drinks + 1);      
     }
     else {
       this.syncState(this.props.num_drinks + 1);      
@@ -73,7 +78,13 @@ export default class Dashboard extends Component{
     if(this.props.num_drinks > 0){
       this.syncState(this.props.num_drinks - 1);
       this.refs.undo_modal.open();
+    } else {
+      return;
     }
+  }
+
+  addFriends() {
+    this.refs.add_friends.open();
   }
 
   resetDrink() {
@@ -91,11 +102,9 @@ export default class Dashboard extends Component{
   }
 
   render() {
-    console.log("Hello")
-
     if(this.props.visible == false){
     	return (null);
-    }
+    };
 
     return (
 
@@ -134,15 +143,9 @@ export default class Dashboard extends Component{
           {'Drink Number:'}
         </Text>
 
-        <Text style={{
-          flex: 5,
-          fontSize: 125,
-          fontWeight: 'bold',
-          textAlign: 'center',
-          justifyContent: 'center',
-        }}>
-          {this.props.num_drinks}
-        </Text>
+        <DrinkCounter num_drinks = {this.props.num_drinks}
+                      drink_limit = {this.props.drinks_limit}
+        />
 
         <Text style={{
           fontSize: 20,
@@ -154,6 +157,7 @@ export default class Dashboard extends Component{
           {'Drink limit: '+this.props.drinks_limit}
         </Text>
 
+
         <View style={{
           flex: 1,
           flexDirection: 'row',
@@ -161,36 +165,50 @@ export default class Dashboard extends Component{
         }}>
 
           <Button title="Add a Drink" color="#40DDD2" onPress={this.addDrink} style={styles.btn}/>
-          <Button title="Undo" color="#40DDD2" onPress={this.undoDrink} style={styles.btn}/>
+          <Button title="Add Friends" color="#ddb340" onPress={this.addFriends} style={styles.btn}/>
+          <Button title="Undo" color="#dd4094" onPress={this.undoDrink} style={styles.btn}/>
           
 
         </View>
 
         <Modal
-            style={[styles.modal, styles.modal4]}
-            ref={"add_modal_success"}
-            onClosed={this.onClose}
-            onOpened={this.onOpen}
-            onClosingState={this.onClosingState}>
-              <Text style={styles.text}>Drink Added! {'\n'}Swipe to exit</Text>
-          </Modal>
+          style={[styles.modal, styles.modal4]}
+          ref={"add_modal_success"}
+          onClosed={this.onClose}
+          onOpened={this.onOpen}
+          onClosingState={this.onClosingState}>
+          <Text style={styles.text}>Drink Added! {'\n'}Swipe to exit</Text>
+        </Modal>
 
-          <Modal
-            style={[styles.modal, styles.modal4]}
-            ref={"add_modal_failed"}
-            onClosed={this.onClose}
-            onOpened={this.onOpen}
-            onClosingState={this.onClosingState}>
-              <Text style={styles.text}>Limit reached! {'\n'}Swipe to exit</Text>
-          </Modal>
+        <Modal
+          style={[styles.modal, styles.modal4]}
+          ref={"add_modal_failed"}
+          onClosed={this.onClose}
+          onOpened={this.onOpen}
+          onClosingState={this.onClosingState}>
+          <Text style={{color: "red", fontSize:20}}>Warning! You have exceeded your drink limit!!!</Text>
+        </Modal>
 
-          <Modal isOpen={this.state.isOpen} 
-                 onClosed={() => this.setState({isOpen: false})} 
-                 ref={"undo_modal"}
-                 style={[styles.modal, styles.modal4]} 
-                 position={"center"} >
-            <Text style={styles.text}>Drink undone!</Text>
-          </Modal>
+        <Modal isOpen={this.state.isOpen} 
+          onClosed={() => this.setState({isOpen: false})} 
+          ref={"undo_modal"}
+          style={[styles.modal, styles.modal4]} 
+          position={"center"} >
+          <Text style={styles.text}>Drink undone!{'\n'}Swipe down to close</Text>
+        </Modal>
+
+        <Modal
+        style={[styles.modal, styles.modal4]}
+        ref={"add_friends"}
+        onClosed={this.onClose}
+        onOpened={this.onOpen}
+        onClosingState={this.onClosingState}>
+          <QRCode
+            value={this.props.group_key}
+            size={200}
+          />
+          <Text>Swipe down to close</Text>
+        </Modal>
       </View>
     );
   }

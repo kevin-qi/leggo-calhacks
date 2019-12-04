@@ -6,7 +6,6 @@ import JoinGroupButton from '../components/join_group_button';
 import GroupButton from '../components/group_button';
 import firebase from '../firebase_init.js';
 
-
 export default class RegisterGroupScreen extends Component {
 	constructor(props){
 		super(props);

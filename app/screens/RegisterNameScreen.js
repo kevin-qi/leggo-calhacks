@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { TextInput, Button, View, Text, StyleSheet} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import CreateGroupButton from '../components/create_group_button'
 
