@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "drinktracker",
-    "slug": "drinktracker",
+    "name": "TrackMyDrinks",
+    "slug": "TrackMyDrinks",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -25,7 +25,6 @@
     ],
     "ios": {
       "supportsTablet": true
-    },
-    "description": ""
+    }
   }
 }
