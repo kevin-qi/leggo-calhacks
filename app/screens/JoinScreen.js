@@ -9,13 +9,14 @@ import firebase from '../firebase_init.js';
 
 export default class JoinScreen extends Component {
 	static navigationOptions = {
-		title: 'Home',
+		title: 'Join a group',
 	};
 
 	constructor(props) {
 		super(props)
 		this.state = {
-			group_key : ""
+			group_key : "",
+			error: ""
 		}
 		this.joinGroup = this.joinGroup.bind(this)
 	}
@@ -32,9 +33,13 @@ export default class JoinScreen extends Component {
 		ref.orderByChild("group_key")
 		.equalTo(group_key.toLowerCase())
 		.once("value", (snap) => {
-			console.log(group_key);
-			const key  = Object.keys(snap.val())[0];
 			console.log(snap);
+			console.log(group_key);
+			if(snap.val() == null){
+				this.setState({error: "Invalid group key"})
+				return;
+			}
+			const key  = Object.keys(snap.val())[0];
 			console.log(key);
 
 			firebase.database().ref('/groups/' + key + "/" + username).update({
@@ -71,11 +76,14 @@ export default class JoinScreen extends Component {
 					//value = this.state.text
 				/>
 
+				<Text style={{color:'red'}}>{this.state.error}</Text>
+
 				< GroupButton 
 					button_name="Join group" 
 					name={this.props.username} 
 					func={this.joinGroup} />
 			</View>
 		);
+
 	};
 }
